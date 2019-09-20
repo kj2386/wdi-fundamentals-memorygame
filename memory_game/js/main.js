@@ -24,23 +24,42 @@ var cards = [
 var cardsInPlay = [];
 
 function checkMatch() {
-	if (cardsInPlay.length === 2) {
-		if (cardsInPlay[0] === cardsInPlay[1]) {
-			console.log("You found a match");
+	if (cardsInPlay[0] === cardsInPlay[1]) {
+			alert("You found a match");
 		} else {
-		console.log("Sorry, try again.");
+		alert("Sorry, try again.");
 		}
+}
+
+function flipCard() {
+	var cardId = this.getAttribute('data-id');
+	cardsInPlay.push(cards[cardId].rank);
+	this.setAttribute('src', cards[cardId].cardImage);
+
+	if (cardsInPlay.length === 2) {
+		checkMatch();
 	}
 }
 
-function flipCard(cardId) {
-	console.log("User flipped " + cards[cardId].rank);
-	console.log(this.cards[cardId].cardImage);
-	console.log(this.cards[cardId].suit);
-	cardsInPlay.push(cards[cardId].rank);
-	checkMatch();
+function createBoard() {
+	for (var i = 0; i < cards.length; i++){
+		var cardElement = document.createElement('img');
+		cardElement.setAttribute('src', "images/back.png");
+		cardElement.setAttribute('data-id', [i]);
+		cardElement.addEventListener("click", flipCard);
+		document.getElementById('game-board').appendChild(cardElement);
+	}
 }
 
-flipCard(0);
-flipCard(2);	
+function resetBoard() {
+	while(cardsInPlay.length > 0) {
+		cardsInPlay.pop();
+	}
+	createBoard();
+}
+
+createBoard();
+	
+var resetButton = document.querySelector('.reset');
+resetButton.addEventListener('click', resetBoard);
 
